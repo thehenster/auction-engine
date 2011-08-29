@@ -7,16 +7,19 @@ require 'thread'
 
 require 'redis'
 
-require 'mega_mutex'
+# slooooww.. removing
+#require 'mega_mutex'
 
 require File.join(File.dirname(__FILE__), 'models/bid_queue')
 require File.join(File.dirname(__FILE__), 'models/bid_worker')
 require File.join(File.dirname(__FILE__), 'models/top_bids')
 
 
+# globally available across all threads for stats
 $redis = Redis.new(:host => 'localhost', :port => 6379)
 $bid_queue = BidQueue.new
 $top_bids = TopBids.new
+# rubys built in mutex runs *much* faster than a network mutex so needs to be globally available across all threads
 $mutex = Mutex.new
 
 module AuctionEngine
